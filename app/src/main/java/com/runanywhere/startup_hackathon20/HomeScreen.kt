@@ -1,5 +1,4 @@
 package com.runanywhere.startup_hackathon20
-
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.background
