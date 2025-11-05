@@ -22,9 +22,10 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             Startup_hackathon20Theme {
-                ChatScreen()
+                AppNavigation()
             }
         }
+
     }
 }
 
