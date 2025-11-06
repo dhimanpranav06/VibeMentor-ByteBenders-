@@ -16,18 +16,21 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.runanywhere.startup_hackathon20.ui.theme.Startup_hackathon20Theme
 
+import androidx.navigation.compose.rememberNavController
+
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
             Startup_hackathon20Theme {
-                AppNavigation()
+                val navController = rememberNavController()
+                AppNavGraph(navController = navController)
             }
         }
-
     }
 }
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
