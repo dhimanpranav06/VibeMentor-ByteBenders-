@@ -3,7 +3,7 @@ package com.runanywhere.startup_hackathon20
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-// import com.runanywhere.startup_hackathon20.api.GroqService
+import com.runanywhere.startup_hackathon20.api.NvidiaService
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -74,22 +74,19 @@ class SkillTrackerViewModel : ViewModel() {
             _error.value = null
             _suggestedSkills.value = emptyList()
 
-            _error.value = "AI service not configured"
-            _isLoading.value = false
-            /*
-            if (!GroqService.isConfigured()) {
-                _error.value = "Groq API key not configured.\n\n" +
+            if (!NvidiaService.isConfigured()) {
+                _error.value = "Nvidia API key not configured.\n\n" +
                         "Get a FREE API key in 30 seconds:\n" +
-                        "1. Visit https://console.groq.com/keys\n" +
+                        "1. Visit https://console.nvidia.com/keys\n" +
                         "2. Sign up with Google/GitHub\n" +
                         "3. Create an API key\n" +
-                        "4. Add it to GroqService.kt"
+                        "4. Add it to NvidiaService.kt"
                 _isLoading.value = false
                 return@launch
             }
 
             try {
-                val suggestions = GroqService.generateSkillSuggestions(interests)
+                val suggestions = NvidiaService.generateSkillSuggestions(interests)
 
                 if (suggestions.isNotEmpty()) {
                     _suggestedSkills.value = suggestions
@@ -101,7 +98,6 @@ class SkillTrackerViewModel : ViewModel() {
             } finally {
                 _isLoading.value = false
             }
-            */
         }
     }
 
@@ -119,18 +115,15 @@ class SkillTrackerViewModel : ViewModel() {
             _error.value = null
             _learningPathAnalysis.value = null
 
-            _error.value = "AI service not configured"
-            _isLoading.value = false
-            /*
-            if (!GroqService.isConfigured()) {
-                _error.value = "Groq API key not configured. Please add it to GroqService.kt"
+            if (!NvidiaService.isConfigured()) {
+                _error.value = "Nvidia API key not configured. Please add it to NvidiaService.kt"
                 _isLoading.value = false
                 return@launch
             }
 
             try {
                 val currentSkillNames = _skills.value.map { it.name }
-                val analysis = GroqService.analyzeLearningPath(currentSkillNames, interests)
+                val analysis = NvidiaService.analyzeLearningPath(currentSkillNames, interests)
 
                 if (analysis.isNotEmpty()) {
                     _learningPathAnalysis.value = analysis
@@ -142,7 +135,6 @@ class SkillTrackerViewModel : ViewModel() {
             } finally {
                 _isLoading.value = false
             }
-            */
         }
     }
 
@@ -155,17 +147,14 @@ class SkillTrackerViewModel : ViewModel() {
             _error.value = null
             _skillTips.value = null
 
-            _error.value = "AI service not configured"
-            _isLoading.value = false
-            /*
-            if (!GroqService.isConfigured()) {
-                _error.value = "Groq API key not configured. Please add it to GroqService.kt"
+            if (!NvidiaService.isConfigured()) {
+                _error.value = "Nvidia API key not configured. Please add it to NvidiaService.kt"
                 _isLoading.value = false
                 return@launch
             }
 
             try {
-                val tips = GroqService.getSkillDevelopmentTips(skillName, currentLevel)
+                val tips = NvidiaService.getSkillDevelopmentTips(skillName, currentLevel)
 
                 if (tips.isNotEmpty()) {
                     _skillTips.value = tips
@@ -177,30 +166,26 @@ class SkillTrackerViewModel : ViewModel() {
             } finally {
                 _isLoading.value = false
             }
-            */
         }
     }
 
     /**
      * Get career recommendations based on current skills
      */
-    fun getCareerRecommendations() {
+    fun generateCareerRecommendations() {
         viewModelScope.launch {
             _isLoading.value = true
             _error.value = null
 
-            _error.value = "AI service not configured"
-            _isLoading.value = false
-            /*
-            if (!GroqService.isConfigured()) {
-                _error.value = "Groq API key not configured. Please add it to GroqService.kt"
+            if (!NvidiaService.isConfigured()) {
+                _error.value = "Nvidia API key not configured. Please add it to NvidiaService.kt"
                 _isLoading.value = false
                 return@launch
             }
 
             try {
                 val currentSkillNames = _skills.value.map { it.name }
-                val recommendations = GroqService.getCareerRecommendations(currentSkillNames)
+                val recommendations = NvidiaService.generateCareerRecommendations(currentSkillNames)
 
                 if (recommendations.isNotEmpty()) {
                     _learningPathAnalysis.value = recommendations
@@ -212,7 +197,6 @@ class SkillTrackerViewModel : ViewModel() {
             } finally {
                 _isLoading.value = false
             }
-            */
         }
     }
 

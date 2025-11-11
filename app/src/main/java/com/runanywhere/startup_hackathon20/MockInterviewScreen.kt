@@ -1,13 +1,7 @@
 package com.runanywhere.startup_hackathon20
 
-import androidx.compose.animation.AnimatedContent
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.*
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -16,7 +10,6 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
@@ -24,10 +17,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.runanywhere.sdk.public.RunAnywhere
+import com.runanywhere.startup_hackathon20.api.NvidiaService
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 data class InterviewQuestion(
@@ -71,36 +62,7 @@ fun MockInterviewScreen(navController: NavController) {
     suspend fun generateInterviewQuestions(role: String, experience: String) {
         isGenerating = true
         try {
-            val prompt =
-                """You are an expert technical interviewer. Generate 5 interview questions for:
-Role: $role
-Experience Level: $experience
-
-Generate progressively challenging questions covering:
-1. Basic role understanding
-2. Technical/functional knowledge
-3. Problem-solving scenario
-4. Behavioral/situational question
-5. Advanced concept or leadership
-
-Format each question clearly numbered:
-1. [Question text]
-2. [Question text]
-3. [Question text]
-4. [Question text]
-5. [Question text]
-
-Make questions realistic and role-specific."""
-
-            var response = ""
-            RunAnywhere.generateStream(prompt)
-                .catch { e ->
-                    // Fallback questions
-                    response = generateFallbackQuestions(role)
-                }
-                .collect { token ->
-                    response += token
-                }
+            val response = NvidiaService.generateInterviewQuestions(role, experience)
 
             questions = parseInterviewQuestions(response, role)
             if (questions.isEmpty()) {
@@ -122,39 +84,9 @@ Make questions realistic and role-specific."""
         var score = 5
 
         try {
-            val prompt = """You are an interview evaluator. Rate this interview answer:
-
-Question: $question
-Candidate's Answer: $answer
-
-Provide:
-1. Score (1-10)
-2. Brief feedback (2-3 lines) on strengths and areas for improvement
-
-Format:
-SCORE: [number]
-FEEDBACK: [Your feedback]"""
-
-            var response = ""
-            RunAnywhere.generateStream(prompt)
-                .catch { e ->
-                    feedback =
-                        "Good attempt! Consider providing more specific examples and structure your answer using the STAR method."
-                    score = 6
-                }
-                .collect { token ->
-                    response += token
-                }
-
-            // Parse score and feedback
-            val scoreMatch = Regex("SCORE:\\s*(\\d+)").find(response)
-            val feedbackMatch =
-                Regex("FEEDBACK:\\s*(.+)", RegexOption.DOT_MATCHES_ALL).find(response)
-
-            score = scoreMatch?.groupValues?.get(1)?.toIntOrNull() ?: 6
-            feedback = feedbackMatch?.groupValues?.get(1)?.trim()
-                ?: "Good response! Keep practicing to improve further."
-
+            val (aiScore, aiFeedback) = NvidiaService.evaluateInterviewAnswer(question, answer)
+            score = aiScore
+            feedback = aiFeedback
         } catch (e: Exception) {
             feedback = "Good effort! Focus on being more specific and providing concrete examples."
             score = 6

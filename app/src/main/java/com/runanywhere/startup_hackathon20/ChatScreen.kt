@@ -30,6 +30,7 @@ import androidx.navigation.NavController
 import com.runanywhere.sdk.public.RunAnywhere
 import com.runanywhere.startup_hackathon20.api.APIConfig
 import com.runanywhere.startup_hackathon20.api.GeminiService
+import com.runanywhere.startup_hackathon20.api.NvidiaService
 import com.runanywhere.startup_hackathon20.api.WikipediaService
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
@@ -52,7 +53,7 @@ fun ChatScreen(navController: NavController) {
         if (messages.isEmpty()) {
             messages = listOf(
                 ChatMessage(
-                    text = "👋 Hello! I'm your learning assistant powered by Gemini.\n\n" +
+                    text = "👋 Hello! I'm your learning assistant powered by NVIDIA NIM.\n\n" +
                             "I can help you learn about:\n" +
                             "• 📚 Scientific concepts\n" +
                             "• 💡 Historical events\n" +
@@ -84,7 +85,7 @@ fun ChatScreen(navController: NavController) {
         }
 
         try {
-            // Use Gemini API
+            // Use NVIDIA API
             val aiResponse = getGeminiChatResponse(userMessage, messages.takeLast(10))
 
             // Add AI response
@@ -138,13 +139,13 @@ fun ChatScreen(navController: NavController) {
                 ) {
                     Column {
                         Text(
-                            text = "🤖 Gemini Chat Assistant",
+                            text = "🤖 AI Chat Assistant",
                             color = Color.White,
                             fontSize = 24.sp,
                             fontWeight = FontWeight.Bold
                         )
                         Text(
-                            text = "Powered by Google Gemini",
+                            text = "Powered by NVIDIA NIM",
                             color = Color(0xFF00D9FF),
                             fontSize = 12.sp
                         )
@@ -152,7 +153,7 @@ fun ChatScreen(navController: NavController) {
 
                     // Status indicator
                     Surface(
-                        color = if (GeminiService.isConfigured()) Color(0xFF00FF88) else Color.Red,
+                        color = if (NvidiaService.isConfigured()) Color(0xFF00FF88) else Color.Red,
                         shape = CircleShape,
                         modifier = Modifier.size(12.dp)
                     ) {}
@@ -461,97 +462,45 @@ Or use Study Mode for detailed reading! 💡"""
 }
 
 /**
- * Get chat response from Gemini API (keeping for reference)
+ * Get chat response from NVIDIA API (replacing Gemini/RunAnywhere)
  */
 suspend fun getGeminiChatResponse(userMessage: String, chatHistory: List<ChatMessage>): String {
     return try {
-        // First, try Gemini API
-        if (GeminiService.isConfigured()) {
-            // Build conversation context
-            val context = if (chatHistory.size > 1) {
-                buildString {
-                    appendLine("Previous conversation:")
-                    chatHistory.takeLast(5).forEach { msg ->
-                        if (msg.isUser) {
-                            appendLine("User: ${msg.text}")
-                        } else {
-                            appendLine("Assistant: ${msg.text}")
-                        }
-                    }
-                    appendLine("\nCurrent question:")
-                }
-            } else {
-                ""
-            }
+        // Use NVIDIA API for chat responses
+        if (NvidiaService.isConfigured()) {
+            Log.d("ChatScreen", "Using NVIDIA API for chat")
+            val response = NvidiaService.generateChatResponse(userMessage, chatHistory)
 
-            val prompt =
-                """You are a friendly, helpful AI learning assistant. Your goal is to help students learn and understand topics clearly.
-
-$context
-User: $userMessage
-
-Provide a clear, concise, and helpful response. Include:
-- A direct answer to their question
-- Simple explanations with examples
-- Encouragement and support
-- Follow-up suggestions if relevant
-
-Keep it conversational and friendly. Use emojis occasionally to make it engaging."""
-
-            val response = GeminiService.generateStudyMaterial(prompt)
-
-            if (response.isNotEmpty() && !response.startsWith("ERROR")) {
+            if (response.isNotEmpty() && !response.startsWith("ERROR") && !response.startsWith("❌")) {
                 return response
             } else {
-                Log.e("ChatScreen", "Gemini API failed: $response")
-                // Fall through to RunAnywhere fallback
+                Log.e("ChatScreen", "NVIDIA API failed: $response")
+                // Fall through to Wikipedia fallback
             }
         }
 
-        // Fallback: Use RunAnywhere AI (local, offline)
-        Log.d("ChatScreen", "Using RunAnywhere AI as fallback")
-        var aiResponse = ""
-        
-        try {
-            val fallbackPrompt = """You are a helpful learning assistant. Answer this question clearly and concisely:
-
-Question: $userMessage
-
-Provide a helpful, educational response."""
-
-            RunAnywhere.generateStream(fallbackPrompt)
-                .catch { e ->
-                    Log.e("ChatScreen", "RunAnywhere failed", e)
-                }
-                .collect { token ->
-                    aiResponse += token
-                }
-
-            if (aiResponse.length > 50) {
-                return aiResponse
-            }
-        } catch (e: Exception) {
-            Log.e("ChatScreen", "RunAnywhere exception", e)
+        // Fallback: Use Wikipedia for a summary
+        Log.d("ChatScreen", "Using Wikipedia API as fallback")
+        val summary = WikipediaService.getSummaryForQuery(userMessage)
+        if (summary.isNotBlank()) {
+            return "📚 **From Wikipedia:**\n\n$summary"
         }
 
         // Last resort: Helpful error message
         """I'm having trouble connecting to my AI services right now. 
 
 **What to check:**
-1. Is your Gemini API key valid? (Check GeminiService.kt line 19)
+1. Is your NVIDIA API key configured? (Check local.properties)
 2. Do you have internet connection?
 3. Try again in a moment
 
 **Current status:**
-- Gemini API: ${if (GeminiService.isConfigured()) "Configured" else "Not configured"}
-
-**Get a FREE Gemini API key:**
-https://makersuite.google.com/app/apikey
+- NVIDIA API: ${if (NvidiaService.isConfigured()) "Configured" else "Not configured"}
 
 Meanwhile, you can use Study Mode which works with Wikipedia! 📚"""
 
     } catch (e: Exception) {
-        Log.e("ChatScreen", "Error in getGeminiChatResponse", e)
-        "Oops! Something went wrong: ${e.message}\n\nPlease check your internet connection and Gemini API key."
+        Log.e("ChatScreen", "Error in chat response", e)
+        "Oops! Something went wrong: ${e.message}\n\nPlease check your internet connection and NVIDIA API key."
     }
 }

@@ -131,7 +131,7 @@ fun SkillTrackerScreen(skillTrackerViewModel: SkillTrackerViewModel = viewModel(
 
             // Action Buttons Row 2
             Button(
-                onClick = { skillTrackerViewModel.getCareerRecommendations() },
+                onClick = { skillTrackerViewModel.generateCareerRecommendations() },
                 modifier = Modifier.fillMaxWidth(),
                 colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF4CAF50)),
                 enabled = !isLoading
