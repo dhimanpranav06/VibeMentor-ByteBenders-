@@ -103,6 +103,31 @@ NvidiaService.generateCareerRecommendations(skills)
 
 ---
 
+### 5. **Creative Muse** (CreativeMuseScreen.kt)
+
+- ✅ Generates creative design concepts
+- ✅ Creates brand names and slogans
+- ✅ Suggests color palettes with meanings
+- ✅ Writes inspiring quotes
+- ✅ Develops story hooks
+- ✅ Designs social media campaign ideas
+
+**How it works:**
+
+```kotlin
+NvidiaService.generateCompletion(creativePrompt)
+// Generates: design concepts, brand names, color palettes, 
+// quotes, story hooks, campaign ideas
+```
+
+**Example outputs:**
+
+- 🌈 "Aurora Canvas - Where light meets creativity"
+- 🎨 "Palette: Midnight Blue + Golden Hour + Rose Quartz"
+- ✨ "Innovation begins where imagination ends"
+- 🚀 "Brand Name: Sparkflow - Lighting the creative path"
+
+---
 ## 📁 New Files Created
 
 ### `NvidiaService.kt`
@@ -166,6 +191,7 @@ NvidiaService.generateCareerRecommendations(skills)
 │  • MockInterviewScreen                      │
 │  • SkillTrackerScreen                       │
 │  • ResumeBuilderScreen                      │
+│  • CreativeMuseScreen                       │
 └──────────────┬──────────────────────────────┘
                │
                ▼
@@ -173,6 +199,7 @@ NvidiaService.generateCareerRecommendations(skills)
 │         ViewModel Layer                     │
 │  • ChatViewModel (not used, direct calls)   │
 │  • SkillTrackerViewModel                    │
+│  • CreativeMuseViewModel                    │
 └──────────────┬──────────────────────────────┘
                │
                ▼
@@ -223,6 +250,15 @@ NvidiaService.generateCareerRecommendations(skills)
 - [x] Generates professional resume content
 - [x] Creates summaries, work experience, education entries
 - [x] Suggests relevant skills and project descriptions
+
+### ✅ Creative Muse
+
+- [x] Generates creative design concepts
+- [x] Creates brand names and slogans
+- [x] Suggests color palettes with meanings
+- [x] Writes inspiring quotes
+- [x] Develops story hooks
+- [x] Designs social media campaign ideas
 
 ---
 
@@ -304,6 +340,7 @@ echo "NVIDIA_API_KEY=your-nvidia-api-key-here" >> local.properties
 - ✅ **Mock Interview** - Question generation and evaluation
 - ✅ **Skill Tracker** - All 4 AI features operational
 - ✅ **Resume Builder** - Generates professional content
+- ✅ **Creative Muse** - Generates creative content
 - ✅ **Study Mode** - Uses Wikipedia (as requested, no AI)
 - ✅ **Build** - Compiles successfully
 - ✅ **Error Handling** - Graceful fallbacks
@@ -342,6 +379,7 @@ If you encounter issues:
 - 💼 AI-powered mock interviews
 - 🎯 Intelligent skill tracking
 - 📄 AI Resume Builder
+- 🎨 Creative Muse
 - 📚 Wikipedia fallbacks for reliability
 
 **Build Status:** ✅ SUCCESS  
