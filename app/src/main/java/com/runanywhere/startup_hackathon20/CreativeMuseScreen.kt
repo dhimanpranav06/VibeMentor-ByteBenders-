@@ -30,6 +30,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.runanywhere.startup_hackathon20.api.NvidiaService
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlin.random.Random
@@ -206,16 +207,45 @@ fun CreativeMuseScreen() {
                         coroutineScope.launch {
                             isGenerating = true
                             idea = "✨ Generating your creative spark..."
-                            val ideas = listOf(
-                                "🌈 Design concept: ‘Dreams in Motion’",
-                                "🎬 Reel Idea: ‘A Frame of Inspiration’",
-                                "🖌️ Palette: Coral Blush + Deep Violet + Sky Glow",
-                                "✨ Quote: ‘Where AI meets imagination’",
-                                "📖 Story Hook: ‘The Code That Painted Emotions’",
-                                "🚀 Brand Name: ‘InspiroLab – Crafting Ideas’"
-                            )
-                            delay(1500)
-                            idea = ideas.random()
+
+                            // Generate AI-powered creative idea
+                            try {
+                                val creativePrompts = listOf(
+                                    "Generate a unique and inspiring design concept name with a brief tagline (1 line each)",
+                                    "Create an innovative brand name and slogan for a creative startup",
+                                    "Suggest a color palette with 3-4 colors and their meanings for a modern brand",
+                                    "Write an inspiring quote about creativity and innovation",
+                                    "Create a compelling story hook for a creative project",
+                                    "Design a catchy social media campaign idea with hashtag"
+                                )
+
+                                val randomPrompt = creativePrompts.random()
+                                val response = NvidiaService.generateCompletion(
+                                    "You are a creative genius who inspires innovation. $randomPrompt. Keep it concise (2-3 lines max) and inspiring."
+                                )
+
+                                if (response.isNotBlank() && !response.startsWith("ERROR") && !response.startsWith(
+                                        "NVIDIA API not configured"
+                                    )
+                                ) {
+                                    idea = "✨ $response"
+                                } else {
+                                    // Fallback to local ideas if API fails
+                                    val fallbackIdeas = listOf(
+                                        "🌈 Design concept: 'Dreams in Motion'\n✨ Where imagination meets reality",
+                                        "🎬 Reel Idea: 'A Frame of Inspiration'\n📸 Capture moments that tell stories",
+                                        "🖌️ Palette: Coral Blush + Deep Violet + Sky Glow\n🎨 Colors that evoke emotion",
+                                        "✨ 'Where AI meets imagination'\n💡 Innovation starts with a spark",
+                                        "📖 Story Hook: 'The Code That Painted Emotions'\n🌟 Technology with a human touch",
+                                        "🚀 Brand Name: 'InspiroLab'\n💫 Crafting ideas into reality"
+                                    )
+                                    idea = fallbackIdeas.random()
+                                }
+                            } catch (e: Exception) {
+                                idea =
+                                    "✨ Keep creating! Your next big idea is just around the corner. 🌟"
+                            }
+
                             isGenerating = false
                             pressed = false
                         }
