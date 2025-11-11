@@ -53,7 +53,23 @@ val (score, feedback) = NvidiaService.evaluateInterviewAnswer(question, answer)
 
 ---
 
-### 3. **AI Skill Tracker** (SkillTrackerViewModel.kt)
+### 3. **AI Resume Builder** (ResumeBuilderScreen.kt)
+
+- ✅ Generates professional resume content with AI
+- ✅ Creates summaries, work experience, education entries
+- ✅ Suggests relevant skills and project descriptions
+- ✅ Achievement-focused and impactful writing
+
+**How it works:**
+
+```kotlin
+NvidiaService.generateCompletion(prompt)
+// Generates content for any resume section
+```
+
+---
+
+### 4. **AI Skill Tracker** (SkillTrackerViewModel.kt)
 
 All 4 AI features now work:
 
@@ -149,6 +165,7 @@ NvidiaService.generateCareerRecommendations(skills)
 │  • ChatScreen                               │
 │  • MockInterviewScreen                      │
 │  • SkillTrackerScreen                       │
+│  • ResumeBuilderScreen                      │
 └──────────────┬──────────────────────────────┘
                │
                ▼
@@ -200,6 +217,12 @@ NvidiaService.generateCareerRecommendations(skills)
 - [x] Analyzes learning path
 - [x] Provides development tips
 - [x] Recommends career paths
+
+### ✅ Resume Builder
+
+- [x] Generates professional resume content
+- [x] Creates summaries, work experience, education entries
+- [x] Suggests relevant skills and project descriptions
 
 ---
 
@@ -280,6 +303,7 @@ echo "NVIDIA_API_KEY=your-nvidia-api-key-here" >> local.properties
 - ✅ **Chat Screen** - Fully functional with NVIDIA
 - ✅ **Mock Interview** - Question generation and evaluation
 - ✅ **Skill Tracker** - All 4 AI features operational
+- ✅ **Resume Builder** - Generates professional content
 - ✅ **Study Mode** - Uses Wikipedia (as requested, no AI)
 - ✅ **Build** - Compiles successfully
 - ✅ **Error Handling** - Graceful fallbacks
@@ -317,6 +341,7 @@ If you encounter issues:
 - 🤖 Chat with Llama 3.1 405B model
 - 💼 AI-powered mock interviews
 - 🎯 Intelligent skill tracking
+- 📄 AI Resume Builder
 - 📚 Wikipedia fallbacks for reliability
 
 **Build Status:** ✅ SUCCESS  
@@ -327,3 +352,4 @@ If you encounter issues:
 
 *Documentation created: December 2024*  
 *NVIDIA NIM Integration: Version 1.0*
+
