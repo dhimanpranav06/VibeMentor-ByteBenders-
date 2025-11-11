@@ -440,6 +440,41 @@ Be specific and actionable."""
     }
 
     /**
+     * Generate general completion (for Resume Builder)
+     */
+    suspend fun generateCompletion(prompt: String): String {
+        return withContext(Dispatchers.IO) {
+            try {
+                if (!isConfigured()) {
+                    return@withContext "NVIDIA API not configured"
+                }
+
+                val messages = JSONArray().apply {
+                    put(JSONObject().apply {
+                        put("role", "system")
+                        put(
+                            "content",
+                            "You are a professional resume writer who creates compelling, achievement-focused content. Be concise and impactful."
+                        )
+                    })
+                    put(JSONObject().apply {
+                        put("role", "user")
+                        put("content", prompt)
+                    })
+                }
+
+                val response = makeNvidiaRequest(messages)
+                Log.d(TAG, "Resume content generated")
+                response
+
+            } catch (e: Exception) {
+                Log.e(TAG, "Error generating resume content", e)
+                "Could not generate. Please try again or enter manually."
+            }
+        }
+    }
+
+    /**
      * Make HTTP request to NVIDIA API
      */
     private suspend fun makeNvidiaRequest(messages: JSONArray): String {

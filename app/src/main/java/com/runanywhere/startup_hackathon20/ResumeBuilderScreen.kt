@@ -36,9 +36,7 @@ import java.io.FileOutputStream
 import androidx.navigation.NavController
 import kotlinx.coroutines.launch
 import androidx.compose.runtime.rememberCoroutineScope
-import com.runanywhere.sdk.public.RunAnywhere
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.collect
+import com.runanywhere.startup_hackathon20.api.NvidiaService
 
 data class ResumeData(
     var name: String = "",
@@ -89,7 +87,7 @@ fun ResumeBuilderScreen(navController: NavController) {
     var isGenerating by remember { mutableStateOf(false) }
     var aiGenerating by remember { mutableStateOf("") } // Track which section is generating
 
-    // AI Resume Content Generator
+    // AI Resume Content Generator using NvidiaService
     suspend fun generateAIContent(section: String, context: String): String {
         var result = ""
         try {
@@ -137,13 +135,7 @@ Format:
                 else -> "Generate content for: $section with context: $context"
             }
 
-            RunAnywhere.generateStream(prompt)
-                .catch { e ->
-                    result = "Could not generate. Please try again or enter manually."
-                }
-                .collect { token ->
-                    result += token
-                }
+            result = NvidiaService.generateCompletion(prompt)
         } catch (e: Exception) {
             result = "Error generating content. Please enter manually."
         }
