@@ -1,131 +1,236 @@
-# RunAnywhere SDK - Simple Chat App
+# VibeMentor - Your Personal AI Growth & Creativity Companion
 
-A simple Android chat application demonstrating the RunAnywhere SDK for on-device AI inference.
+**Team ByteBenders** | VibeState'25 Hackathon
 
-## What This App Does
+---
 
-This is a minimal example showing how to:
+## ✨ **What is VibeMentor?**
 
-1. Initialize the RunAnywhere SDK
-2. Download AI models (LLMs)
-3. Load models into memory
-4. Run text generation with streaming responses
+VibeMentor is an all-in-one AI-powered learning companion that helps you:
 
-## Features
+- 📚 **Study Smarter** - Get comprehensive information on any topic
+- ❓ **Test Knowledge** - Take unique quizzes that never repeat
+- 💼 **Build Career** - Create professional resumes and practice interviews
+- 🎨 **Boost Creativity** - Generate ideas and content
+- 🚀 **Track Progress** - Monitor your learning journey
 
-- **Model Management**: Download and load AI models directly in the app
-- **Real-time Streaming**: See AI responses generate word-by-word
-- **Simple UI**: Clean Jetpack Compose interface
-- **On-Device AI**: All inference runs locally on your Android device
+---
 
-## Quick Start
+## 🎯 **Key Features**
 
-### 1. Build and Run
+### 📚 **Study Mode**
 
-```bash
-./gradlew assembleDebug
-# Or open in Android Studio and click Run
-```
+- Search any topic and get real Wikipedia content
+- Comprehensive articles with multiple sections
+- Related topics for further exploration
+- Local AI enhancements for better learning
 
-### 2. Download a Model
+### ❓ **Smart Quiz System**
 
-1. Launch the app
-2. Tap "Models" in the top bar
-3. Choose a model (we recommend starting with "SmolLM2 360M Q8_0" - only 119 MB)
-4. Tap "Download" and wait for it to complete
+- Generate unique quizzes on any topic
+- **Questions change every time** - never the same twice!
+- 5 question variants per position
+- Shuffled answers with random correct positions
+- Encourages real learning, not memorization
 
-### 3. Load the Model
+### 💼 **Career Mode**
 
-1. Once downloaded, tap "Load" on the model
-2. Wait for "Model loaded! Ready to chat." message
+- **Resume Builder** - Create professional resumes
+- **Mock Interview** - Practice with AI-generated questions
+- **Skill Tracker** - Monitor your progress
 
-### 4. Start Chatting!
+### 🎨 **Creative Muse**
 
-1. Type a message in the text field
-2. Tap "Send"
-3. Watch the AI response generate in real-time
+- Generate creative ideas
+- Content suggestions
+- Inspiration on demand
 
-## Available Models
+### 💬 **AI Chat**
 
-The app comes pre-configured with two models:
+- Powered by RunAnywhere SDK
+- Offline-capable conversations
+- Personal AI assistant
 
-| Model | Size | Quality | Best For |
-|-------|------|---------|----------|
-| SmolLM2 360M Q8_0 | 119 MB | Basic | Testing, quick responses |
-| Qwen 2.5 0.5B Instruct Q6_K | 374 MB | Better | General conversations |
+---
 
-## Technical Details
+## ⚡ **Quick Start**
 
-### SDK Components Used
+### **Setup: ZERO Steps!**
 
-- **RunAnywhere Core SDK**: Component architecture and model management
-- **LlamaCpp Module**: Optimized llama.cpp inference engine with 7 ARM64 variants
-- **Kotlin Coroutines**: For async operations and streaming
+1. Clone the repository
+2. Open in Android Studio
+3. Build → Rebuild Project
+4. Run the app ▶️
+5. **Done!** No API keys needed!
 
-### Architecture
+---
 
-```
-MyApplication (initialization)
-    ↓
-ChatViewModel (state management)
-    ↓
-ChatScreen (UI layer)
-```
+## 🛠️ **Technology Stack**
 
-### Key Files
+### **Frontend:**
 
-- `MyApplication.kt` - SDK initialization and model registration
-- `ChatViewModel.kt` - Business logic and state management
-- `MainActivity.kt` - UI components and composables
+- Kotlin + Jetpack Compose
+- Material Design 3
+- Beautiful animations and gradients
 
-## Requirements
+### **Backend/APIs:**
 
-- Android 7.0 (API 24) or higher
-- ~200 MB free storage (for smallest model)
-- Internet connection (for downloading models)
+- **Wikipedia API** - Real content (FREE, no key needed!)
+- **RunAnywhere SDK** - Local AI processing
+- **Smart Randomization** - Unique quiz generation
 
-## Troubleshooting
+### **Architecture:**
 
-### Models not showing up
+- Clean Architecture
+- MVVM Pattern
+- Kotlin Coroutines
+- Jetpack Navigation
 
-- Wait a few seconds for SDK initialization
-- Tap "Refresh" in the Models section
-- Check logcat for initialization errors
+---
 
-### Download fails
+## 🎨 **Features in Detail**
 
-- Check internet connection
-- Ensure sufficient storage space
-- Verify INTERNET permission in AndroidManifest.xml
+### **Study Mode:**
 
-### App crashes during generation
+✅ Real Wikipedia articles  
+✅ Comprehensive content  
+✅ Related topics  
+✅ Local AI enhancements  
+✅ Completely FREE
 
-- Try the smaller model (SmolLM2 360M)
-- Close other apps to free memory
-- Check that `largeHeap="true"` is set in AndroidManifest.xml
+### **Quiz System:**
 
-### Generation is slow
+✅ Unique questions every attempt  
+✅ 5 question templates per position  
+✅ Shuffled answer options  
+✅ Random correct answer positions  
+✅ Topic-specific content
 
-- This is normal for on-device inference
-- Smaller models run faster
-- Performance depends on device CPU
+### **Career Tools:**
 
-## Next Steps
+✅ Professional resume builder  
+✅ AI-powered mock interviews  
+✅ Skill tracking system  
+✅ Export capabilities
 
-Want to customize this app? Try:
+---
 
-1. **Add more models** - Edit `MyApplication.kt` → `registerModels()`
-2. **Customize UI** - Edit `MainActivity.kt` compose functions
-3. **Add system prompts** - Modify message format in `ChatViewModel.kt`
-4. **Persist chat history** - Add Room database or DataStore
-5. **Add model parameters** - Explore temperature, top-k, top-p settings
+## 📱 **How to Use**
 
-## Resources
+### **Study Mode:**
 
-- [Full Quick Start Guide](app/src/main/java/com/runanywhere/startup_hackathon20/QUICK_START_ANDROID.md)
-- [RunAnywhere SDK Repository](https://github.com/RunanywhereAI/runanywhere-sdks)
-- [SDK Documentation](https://github.com/RunanywhereAI/runanywhere-sdks/blob/main/CLAUDE.md)
+1. Open "📚 Study Mode"
+2. Search any topic (e.g., "Python Programming")
+3. Get comprehensive Wikipedia content
+4. Click "❓ Take Quiz" to test your knowledge
 
-## License
+### **Quiz System:**
 
-This example app follows the license of the RunAnywhere SDK.
+1. After reading study material
+2. Click "Take Quiz"
+3. Answer 5 unique questions
+4. Get instant results
+5. **Try again** - questions will be different!
+
+### **Career Mode:**
+
+1. Open "💼 Career Mode"
+2. Choose: Resume Builder, Mock Interview, or Skill Tracker
+3. Follow the guided process
+4. Export or save your work
+
+---
+
+## 🌟 **Why VibeMentor?**
+
+### **100% FREE**
+
+- No API keys required
+- No payment needed
+- No subscription
+
+### **Works Immediately**
+
+- Zero setup time
+- No configuration
+- Just build and run!
+
+### **Always Unique**
+
+- Quiz questions never repeat
+- Real learning experience
+- No memorization needed
+
+### **Reliable**
+
+- No external API dependencies
+- No rate limits
+- Always available
+
+### **Professional Quality**
+
+- Beautiful modern UI
+- Smooth animations
+- Great UX
+
+---
+
+## 🚀 **Demo Ready**
+
+Perfect for hackathons and presentations:
+
+- ✅ No setup delays
+- ✅ Works immediately
+- ✅ Impressive features
+- ✅ Unique quiz demonstration
+- ✅ Professional appearance
+
+---
+
+## 📖 **Documentation**
+
+- **WIKIPEDIA_ONLY_SETUP.md** - Complete setup guide
+- **PROJECT_ROADMAP.md** - Development roadmap
+- **PROGRESS_UPDATE.md** - Progress tracking
+
+---
+
+## 👥 **Team ByteBenders**
+
+- **Pranav Dhiman** - Team Leader & Developer
+- **Lavanya Mittal** - UX Designer & AI Workflow Specialist
+- **Khushnoor Kaur** - Frontend & UI Developer
+- **Arshpreet Kaur** - Backend & Database Engineer
+
+---
+
+## 🎯 **Mission**
+
+Making AI-powered education accessible to everyone with **ZERO barriers** - no payment, no setup, no
+complexity.
+
+---
+
+## 🏆 **VibeState'25 Hackathon**
+
+Powered by RunAnywhere & Firebender
+
+**"Learn. Create. Grow. Repeat."** ✨
+
+---
+
+## 📝 **License**
+
+This project was created for the VibeState'25 Hackathon.
+
+---
+
+## 🙏 **Acknowledgments**
+
+- RunAnywhere SDK for local AI processing
+- Wikipedia API for comprehensive content
+- Material Design for beautiful UI components
+
+---
+
+**Built with ❤️ by Team ByteBenders**

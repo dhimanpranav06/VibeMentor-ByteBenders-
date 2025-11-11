@@ -26,32 +26,53 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import kotlinx.coroutines.delay
 import java.util.Calendar
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.graphics.drawscope.rotate as drawRotate
+import kotlin.math.cos
+import kotlin.math.sin
+import androidx.compose.foundation.Canvas
+import androidx.compose.ui.graphics.Path
+import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.graphics.StrokeJoin
+import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.graphics.Shadow
 
 @Composable
 fun VibeMentorHomeScreen(navController: NavHostController) {
-    // Animated background gradient 
-    val gradientColors = listOf(
-        Color(0xFF6A11CB),  // Purple
-        Color(0xFF2575FC),  // Blue
-        Color(0xFF00C9FF),  // Aqua
-        Color(0xFF92FE9D)   // Mint Green
-    )
-
+    // Enhanced animated background with multiple gradient layers
     val infiniteTransition = rememberInfiniteTransition(label = "")
-    val animatedOffset by infiniteTransition.animateFloat(
+
+    // Primary gradient animation
+    val animatedOffset1 by infiniteTransition.animateFloat(
         initialValue = 0f,
-        targetValue = 1200f,
+        targetValue = 2000f,
         animationSpec = infiniteRepeatable(
-            animation = tween(10000, easing = LinearEasing),
+            animation = tween(8000, easing = LinearEasing),
             repeatMode = RepeatMode.Reverse
         ),
-        label = ""
+        label = "offset1"
     )
 
-    val brush = Brush.linearGradient(
-        colors = gradientColors,
-        start = Offset(0f, animatedOffset),
-        end = Offset(animatedOffset, 0f)
+    // Secondary gradient animation (faster)
+    val animatedOffset2 by infiniteTransition.animateFloat(
+        initialValue = 0f,
+        targetValue = -1500f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(6000, easing = LinearEasing),
+            repeatMode = RepeatMode.Reverse
+        ),
+        label = "offset2"
+    )
+
+    // Radial gradient animation
+    val radiusAnimation by infiniteTransition.animateFloat(
+        initialValue = 800f,
+        targetValue = 1400f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(5000, easing = FastOutSlowInEasing),
+            repeatMode = RepeatMode.Reverse
+        ),
+        label = "radius"
     )
 
     // Pulsing animation for logo/title 
@@ -65,35 +86,46 @@ fun VibeMentorHomeScreen(navController: NavHostController) {
         label = ""
     )
 
-    // Android icon animations 
-    val androidRotation by infiniteTransition.animateFloat(
-        initialValue = -10f,
-        targetValue = 10f,
+    // Cute icon animations - bouncing effect
+    val iconBounce by infiniteTransition.animateFloat(
+        initialValue = 0f,
+        targetValue = -20f,
         animationSpec = infiniteRepeatable(
-            animation = tween(3000, easing = FastOutSlowInEasing),
+            animation = tween(1500, easing = FastOutSlowInEasing),
+            repeatMode = RepeatMode.Reverse
+        ),
+        label = "bounce"
+    )
+
+    val iconScale by infiniteTransition.animateFloat(
+        initialValue = 1f,
+        targetValue = 1.2f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(1500, easing = FastOutSlowInEasing),
+            repeatMode = RepeatMode.Reverse
+        ),
+        label = "iconScale"
+    )
+
+    val iconRotation by infiniteTransition.animateFloat(
+        initialValue = -5f,
+        targetValue = 5f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(2000, easing = FastOutSlowInEasing),
             repeatMode = RepeatMode.Reverse
         ),
         label = "rotation"
     )
 
-    val androidScale by infiniteTransition.animateFloat(
-        initialValue = 1f,
-        targetValue = 1.15f,
-        animationSpec = infiniteRepeatable(
-            animation = tween(2500, easing = FastOutSlowInEasing),
-            repeatMode = RepeatMode.Reverse
-        ),
-        label = "androidScale"
-    )
-
-    val androidOffset by infiniteTransition.animateFloat(
+    // Sparkle animation for decorative stars
+    val sparkleRotation by infiniteTransition.animateFloat(
         initialValue = 0f,
-        targetValue = -15f,
+        targetValue = 360f,
         animationSpec = infiniteRepeatable(
-            animation = tween(2000, easing = FastOutSlowInEasing),
-            repeatMode = RepeatMode.Reverse
+            animation = tween(4000, easing = LinearEasing),
+            repeatMode = RepeatMode.Restart
         ),
-        label = "offset"
+        label = "sparkleRotation"
     )
 
     // Time-based greeting 
@@ -138,7 +170,48 @@ fun VibeMentorHomeScreen(navController: NavHostController) {
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(brush),
+            .drawBehind {
+                // Multi-layer animated gradient background
+                val gradientColors1 = listOf(
+                    Color(0xFF6A11CB),
+                    Color(0xFF2575FC),
+                    Color(0xFF00C9FF)
+                )
+
+                val gradientColors2 = listOf(
+                    Color(0xFF92FE9D),
+                    Color(0xFFFFB74D),
+                    Color(0xFFBA68C8)
+                )
+
+                // First layer - linear gradient
+                val brush1 = Brush.linearGradient(
+                    colors = gradientColors1,
+                    start = Offset(0f, animatedOffset1),
+                    end = Offset(size.width + animatedOffset1, size.height)
+                )
+                drawRect(brush = brush1)
+
+                // Second layer - radial gradient with opacity
+                val brush2 = Brush.radialGradient(
+                    colors = gradientColors2.map { it.copy(alpha = 0.6f) },
+                    center = Offset(size.width / 2 + animatedOffset2, size.height / 2),
+                    radius = radiusAnimation
+                )
+                drawRect(brush = brush2)
+
+                // Third layer - diagonal sweep
+                val brush3 = Brush.linearGradient(
+                    colors = listOf(
+                        Color(0x33FFFFFF),
+                        Color(0x00FFFFFF),
+                        Color(0x33FFFFFF)
+                    ),
+                    start = Offset(animatedOffset1 / 2, 0f),
+                    end = Offset(size.width, size.height + animatedOffset1 / 2)
+                )
+                drawRect(brush = brush3)
+            },
         contentAlignment = Alignment.Center
     ) {
         Column(
@@ -163,19 +236,58 @@ fun VibeMentorHomeScreen(navController: NavHostController) {
                     modifier = Modifier.padding(bottom = 16.dp)
                 )
 
-                // Android Icon
-                Text(
-                    text = "🤖",
-                    fontSize = 56.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = Color.White,
-                    textAlign = TextAlign.Center,
+                // Cute animated icon section with sparkles
+                Box(
+                    contentAlignment = Alignment.Center,
                     modifier = Modifier
-                        .scale(androidScale)
-                        .rotate(androidRotation)
-                        .offset(y = androidOffset.dp)
                         .padding(vertical = 12.dp)
-                )
+                        .size(120.dp)
+                ) {
+                    // Decorative sparkles around the main icon
+                    Text(
+                        text = "✨",
+                        fontSize = 24.sp,
+                        modifier = Modifier
+                            .offset(x = (-40).dp, y = (-30).dp)
+                            .rotate(sparkleRotation)
+                            .scale((iconScale - 0.2f).coerceAtLeast(0.8f))
+                    )
+
+                    Text(
+                        text = "✨",
+                        fontSize = 24.sp,
+                        modifier = Modifier
+                            .offset(x = 40.dp, y = (-30).dp)
+                            .rotate(-sparkleRotation)
+                            .scale((iconScale - 0.2f).coerceAtLeast(0.8f))
+                    )
+
+                    Text(
+                        text = "⭐",
+                        fontSize = 20.sp,
+                        modifier = Modifier
+                            .offset(x = (-45).dp, y = 25.dp)
+                            .rotate(sparkleRotation / 2)
+                            .scale((iconScale - 0.3f).coerceAtLeast(0.7f))
+                    )
+
+                    Text(
+                        text = "⭐",
+                        fontSize = 20.sp,
+                        modifier = Modifier
+                            .offset(x = 45.dp, y = 25.dp)
+                            .rotate(-sparkleRotation / 2)
+                            .scale((iconScale - 0.3f).coerceAtLeast(0.7f))
+                    )
+
+                    // Main cute AI bot icon - using a cute robot/AI representation
+                    VShapeIcon(
+                        modifier = Modifier
+                            .offset(y = iconBounce.dp),
+                        scale = iconScale,
+                        rotation = iconRotation
+                    )
+                }
 
                 // App Title
                 Text(
@@ -251,6 +363,109 @@ fun VibeMentorHomeScreen(navController: NavHostController) {
                     )
                 }
             }
+        }
+    }
+}
+
+@Composable
+fun VShapeIcon(
+    modifier: Modifier = Modifier,
+    scale: Float = 1f,
+    rotation: Float = 0f
+) {
+    Canvas(
+        modifier = modifier
+            .size(100.dp)
+            .scale(scale)
+            .rotate(rotation)
+    ) {
+        val width = size.width
+        val height = size.height
+
+        // Create the V shape path
+        val vPath = Path().apply {
+            // Start from top-left
+            moveTo(width * 0.2f, height * 0.15f)
+            // Line to bottom center
+            lineTo(width * 0.5f, height * 0.85f)
+            // Line to top-right
+            lineTo(width * 0.8f, height * 0.15f)
+        }
+
+        // Draw outer glow effect (multiple layers)
+        for (i in 3 downTo 1) {
+            drawPath(
+                path = vPath,
+                brush = Brush.verticalGradient(
+                    colors = listOf(
+                        Color(0xFFFFD700).copy(alpha = 0.1f * i),
+                        Color(0xFFFF69B4).copy(alpha = 0.1f * i),
+                        Color(0xFF00E0FF).copy(alpha = 0.1f * i)
+                    )
+                ),
+                style = Stroke(
+                    width = (28f + i * 8f),
+                    cap = StrokeCap.Round,
+                    join = StrokeJoin.Round
+                )
+            )
+        }
+
+        // Draw main V with gradient
+        drawPath(
+            path = vPath,
+            brush = Brush.verticalGradient(
+                colors = listOf(
+                    Color(0xFFFFD700), // Gold
+                    Color(0xFFFF69B4), // Pink
+                    Color(0xFF00E0FF)  // Cyan
+                )
+            ),
+            style = Stroke(
+                width = 24f,
+                cap = StrokeCap.Round,
+                join = StrokeJoin.Round
+            )
+        )
+
+        // Draw inner highlight
+        drawPath(
+            path = vPath,
+            brush = Brush.verticalGradient(
+                colors = listOf(
+                    Color.White.copy(alpha = 0.8f),
+                    Color.White.copy(alpha = 0.3f),
+                    Color.White.copy(alpha = 0.0f)
+                )
+            ),
+            style = Stroke(
+                width = 8f,
+                cap = StrokeCap.Round,
+                join = StrokeJoin.Round
+            )
+        )
+
+        // Add sparkle dots around the V
+        val sparklePositions = listOf(
+            Offset(width * 0.15f, height * 0.2f),
+            Offset(width * 0.85f, height * 0.2f),
+            Offset(width * 0.5f, height * 0.9f),
+            Offset(width * 0.3f, height * 0.5f),
+            Offset(width * 0.7f, height * 0.5f)
+        )
+
+        sparklePositions.forEach { pos ->
+            drawCircle(
+                brush = Brush.radialGradient(
+                    colors = listOf(
+                        Color.White,
+                        Color(0xFFFFD700).copy(alpha = 0.5f),
+                        Color.Transparent
+                    )
+                ),
+                radius = 4f,
+                center = pos
+            )
         }
     }
 }

@@ -34,7 +34,7 @@ class MainActivity : ComponentActivity() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ChatScreen(viewModel: ChatViewModel = viewModel()) {
+fun OldChatScreen(viewModel: ChatViewModel = viewModel()) {
     val messages by viewModel.messages.collectAsState()
     val isLoading by viewModel.isLoading.collectAsState()
     val availableModels by viewModel.availableModels.collectAsState()
@@ -287,6 +287,6 @@ fun ModelItem(
 @Composable
 fun DefaultPreview() {
     Startup_hackathon20Theme {
-        ChatScreen()
+        OldChatScreen()
     }
 }

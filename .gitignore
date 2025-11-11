@@ -55,6 +55,9 @@ captures/
 # !.idea/compiler.xml
 # !.idea/runConfigurations.xml
 
+# ChatHistory contains sensitive data (API keys, tokens)
+.idea/ChatHistory_schema_v3.xml
+
 # Keystore files
 *.jks
 *.keystore
